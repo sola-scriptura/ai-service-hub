@@ -3,7 +3,7 @@ import { Expert } from '@/types';
 export const experts: Expert[] = [
   // Documents & Compliance Experts
   {
-    id: 'expert-legal-1',
+    id: 'a1b2c3d4-e5f6-4890-abcd-ef1234567890',
     name: 'Sarah Mitchell',
     avatar: undefined,
     specializations: ['documents-compliance'],
@@ -15,7 +15,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-legal-2',
+    id: 'b2c3d4e5-f6a7-4901-bcde-f23456789012',
     name: 'David Chen',
     avatar: undefined,
     specializations: ['documents-compliance'],
@@ -27,7 +27,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-legal-3',
+    id: 'c3d4e5f6-a7b8-4012-cdef-345678901234',
     name: 'Jennifer Rodriguez',
     avatar: undefined,
     specializations: ['documents-compliance'],
@@ -41,7 +41,7 @@ export const experts: Expert[] = [
 
   // Content Humanization Experts
   {
-    id: 'expert-content-1',
+    id: 'd4e5f6a7-b8c9-4123-defa-456789012345',
     name: 'Emily Thompson',
     avatar: undefined,
     specializations: ['content-humanization'],
@@ -53,7 +53,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-content-2',
+    id: 'e5f6a7b8-c9d0-4234-efab-567890123456',
     name: 'Marcus Johnson',
     avatar: undefined,
     specializations: ['content-humanization'],
@@ -65,7 +65,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-content-3',
+    id: 'f6a7b8c9-d0e1-4345-fabc-678901234567',
     name: 'Olivia Martinez',
     avatar: undefined,
     specializations: ['content-humanization'],
@@ -79,7 +79,7 @@ export const experts: Expert[] = [
 
   // Video & Audio Polish Experts
   {
-    id: 'expert-video-1',
+    id: 'a7b8c9d0-e1f2-4456-abcd-789012345678',
     name: 'Alex Rivera',
     avatar: undefined,
     specializations: ['video-audio-polish'],
@@ -91,7 +91,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-video-2',
+    id: 'b8c9d0e1-f2a3-4567-bcde-890123456789',
     name: 'Sophia Lee',
     avatar: undefined,
     specializations: ['video-audio-polish'],
@@ -105,7 +105,7 @@ export const experts: Expert[] = [
 
   // Graphic Design Refinement Experts
   {
-    id: 'expert-design-1',
+    id: 'c9d0e1f2-a3b4-4678-cdef-901234567890',
     name: 'Isabella Garcia',
     avatar: undefined,
     specializations: ['graphic-design-refinement'],
@@ -117,7 +117,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-design-2',
+    id: 'd0e1f2a3-b4c5-4789-defa-012345678901',
     name: 'Ethan Williams',
     avatar: undefined,
     specializations: ['graphic-design-refinement'],
@@ -131,7 +131,7 @@ export const experts: Expert[] = [
 
   // AI Training & Optimization Experts
   {
-    id: 'expert-ai-1',
+    id: 'e1f2a3b4-c5d6-4890-efab-123456789012',
     name: 'Dr. Michael Zhang',
     avatar: undefined,
     specializations: ['ai-training-optimization'],
@@ -143,7 +143,7 @@ export const experts: Expert[] = [
     availability: 'busy',
   },
   {
-    id: 'expert-ai-2',
+    id: 'f2a3b4c5-d6e7-4901-fabc-234567890123',
     name: 'Rachel Kumar',
     avatar: undefined,
     specializations: ['ai-training-optimization'],
@@ -157,7 +157,7 @@ export const experts: Expert[] = [
 
   // Academic Research Validation Experts
   {
-    id: 'expert-academic-1',
+    id: 'a3b4c5d6-e7f8-4012-abcd-345678901234',
     name: 'Dr. Patricia Anderson',
     avatar: undefined,
     specializations: ['academic-research-validation'],
@@ -169,7 +169,7 @@ export const experts: Expert[] = [
     availability: 'available',
   },
   {
-    id: 'expert-academic-2',
+    id: 'b4c5d6e7-f8a9-4123-bcde-456789012345',
     name: 'Dr. James Wilson',
     avatar: undefined,
     specializations: ['academic-research-validation'],

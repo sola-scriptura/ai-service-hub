@@ -27,7 +27,7 @@ const Hero = () => {
 
         <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
           <Button asChild size="lg" variant="hero">
-            <a href="#contact">Get Your Free Quote →</a>
+            <a href="#services">Get Your Free Quote →</a>
           </Button>
           <Button asChild size="lg" variant="heroSecondary">
             <a href="#how">See How It Works</a>

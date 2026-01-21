@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Service, Quote } from '@/types';
+import { Service, Quote, PricingRule } from '@/types';
 import { useAppContext } from '@/context/AppContext';
-import { calculatePrice, getTurnaroundTime, pricingRules } from '@/data/pricing';
+import { pricingApi } from '@/services/pricingApi';
+import { getTurnaroundTime } from '@/data/pricing';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
@@ -13,13 +14,34 @@ interface PriceCalculatorProps {
 const PriceCalculator = ({ service }: PriceCalculatorProps) => {
   const { pricingCriteria, setPricingCriteria, setCurrentQuote } = useAppContext();
   const [localCriteria, setLocalCriteria] = useState(pricingCriteria);
+  const [pricingRule, setPricingRule] = useState<PricingRule | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const pricingRule = pricingRules.find((r) => r.serviceId === service.id);
+  // Fetch pricing rule for this service
+  useEffect(() => {
+    const fetchPricingRule = async () => {
+      try {
+        console.log('[PriceCalculator] Fetching pricing rule for service:', service.id);
+        const rules = await pricingApi.getAll();
+        const rule = rules.find((r) => r.serviceId === service.id);
+        console.log('[PriceCalculator] Pricing rule:', rule);
+        setPricingRule(rule || null);
+      } catch (error) {
+        console.error('[PriceCalculator] Error fetching pricing rule:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchPricingRule();
+  }, [service.id]);
+
+  // Calculate quote when criteria changes
   useEffect(() => {
     if (!pricingRule) return;
 
-    const { finalPrice, breakdown } = calculatePrice(
+    console.log('[PriceCalculator] Calculating price with criteria:', localCriteria);
+    const { finalPrice, breakdown } = pricingApi.calculatePrice(
       service.id,
       localCriteria.urgency,
       localCriteria.complexity,
@@ -38,9 +60,21 @@ const PriceCalculator = ({ service }: PriceCalculatorProps) => {
       criteria: localCriteria,
     };
 
+    console.log('[PriceCalculator] Generated quote:', quote);
     setCurrentQuote(quote);
     setPricingCriteria(localCriteria);
   }, [service.id, localCriteria, pricingRule, setCurrentQuote, service.title, setPricingCriteria]);
+
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <h2 className="font-display text-2xl font-bold mb-2">Configure Your Project</h2>
+          <p className="text-primary-600">Loading pricing information...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!pricingRule) {
     return <div className="text-primary-600">Pricing not available for this service.</div>;

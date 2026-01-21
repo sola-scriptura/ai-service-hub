@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import { services } from '@/data/services';
+import { useService } from '@/hooks/useServices';
 import ExpertSelector from '@/components/experts/ExpertSelector';
 import PriceCalculator from '@/components/pricing/PriceCalculator';
 import QuoteDisplay from '@/components/pricing/QuoteDisplay';
@@ -21,16 +21,29 @@ const iconMap: Record<string, React.ElementType> = {
 
 const ServiceDetail = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
-  const service = services.find((s) => s.id === serviceId);
+  const { data: service, isLoading, error } = useService(serviceId);
   const { setSelectedService } = useAppContext();
 
+  // Update context when service data is loaded
   useEffect(() => {
     if (service) {
       setSelectedService(service);
     }
   }, [service, setSelectedService]);
 
-  if (!service) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="py-24 px-[5%] text-center">
+          <p className="text-primary-600">Loading service...</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !service) {
     return (
       <div className="min-h-screen">
         <Header />

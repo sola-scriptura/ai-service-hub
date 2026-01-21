@@ -1,14 +1,29 @@
+import { useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import AuthModal from '@/components/auth/AuthModal';
+import ProjectSubmissionModal from '@/components/projects/ProjectSubmissionModal';
 
 const QuoteDisplay = () => {
   const { currentQuote, selectedExpert } = useAppContext();
+  const { user } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
 
   const handleGetStarted = () => {
-    console.log('Quote:', currentQuote);
-    console.log('Selected Expert:', selectedExpert);
-    alert('Project submission form will be implemented next!');
+    if (!user) {
+      console.log('[QuoteDisplay] User not authenticated, showing auth modal');
+      setAuthModalOpen(true);
+      return;
+    }
+
+    console.log('[QuoteDisplay] Opening project submission form');
+    console.log('[QuoteDisplay] Quote:', currentQuote);
+    console.log('[QuoteDisplay] Selected Expert:', selectedExpert);
+    console.log('[QuoteDisplay] User:', user);
+    setProjectModalOpen(true);
   };
 
   return (
@@ -80,7 +95,11 @@ const QuoteDisplay = () => {
             variant="cta"
             disabled={!selectedExpert}
           >
-            {selectedExpert ? 'Get Started' : 'Select an Expert First'}
+            {!selectedExpert
+              ? 'Select an Expert First'
+              : !user
+              ? 'Sign In to Continue'
+              : 'Get Started'}
           </Button>
 
           <p className="text-xs text-center text-primary-500 mt-4">
@@ -92,6 +111,19 @@ const QuoteDisplay = () => {
           <p className="text-primary-600">Configure your project to see pricing</p>
         </div>
       )}
+
+      {/* Auth Modal */}
+      <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        defaultMode="signup"
+      />
+
+      {/* Project Submission Modal */}
+      <ProjectSubmissionModal
+        open={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
     </div>
   );
 };
