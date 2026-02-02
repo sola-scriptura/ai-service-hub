@@ -23,7 +23,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+         <BrowserRouter basename="/ai-service-hub" future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/start-project" element={<ProtectedRoute><StartProject /></ProtectedRoute>} />
