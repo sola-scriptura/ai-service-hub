@@ -251,9 +251,16 @@
 }
 
 .landing-page .nav-cta:hover {
-    background: var(--accent);
+    background: #6D28D9;
+    color: white;
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
+}
+
+.landing-page .nav-cta:active {
+    background: #5B21B6;
+    color: white;
+    transform: translateY(0);
 }
 
 .landing-page .nav-auth-group {
@@ -466,9 +473,16 @@
 }
 
 .landing-page .btn-primary:hover {
-    background: var(--accent);
+    background: #6D28D9;
+    color: white;
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.landing-page .btn-primary:active {
+    background: #5B21B6;
+    color: white;
+    transform: translateY(0);
 }
 
 .landing-page .btn-secondary {
@@ -478,8 +492,14 @@
 }
 
 .landing-page .btn-secondary:hover {
-    background: var(--bg);
-    border-color: var(--text-muted);
+    background: #6D28D9;
+    color: white;
+    border-color: #6D28D9;
+}
+
+.landing-page .btn-secondary:active {
+    background: #5B21B6;
+    color: white;
 }
 
 .landing-page .hero-social-proof {

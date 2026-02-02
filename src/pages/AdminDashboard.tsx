@@ -45,7 +45,7 @@ import {
 } from 'lucide-react';
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { toast } = useToast();
 
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -397,6 +397,14 @@ const AdminDashboard = () => {
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
                 Refresh
+              </Button>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  await signOut();
+                }}
+              >
+                Sign Out
               </Button>
               <Dialog open={showNewAdminDialog} onOpenChange={setShowNewAdminDialog}>
                 <DialogTrigger asChild>

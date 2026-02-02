@@ -12,7 +12,7 @@ interface ProjectWithFiles extends Project {
 }
 
 const ClientDashboard = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [projects, setProjects] = useState<ProjectWithFiles[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -83,14 +83,27 @@ const ClientDashboard = () => {
         <div className="dashboard-inner">
           {/* Header */}
           <div className="dashboard-header">
-            <Link to="/" className="back-link back-link-dark">
-              <ArrowLeft size={16} />
-              Back to Home
-            </Link>
-            <h1>My Projects</h1>
-            <p>
-              Welcome back, {user.fullName || user.email}! Here are your submitted projects.
-            </p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <Link to="/" className="back-link back-link-dark">
+                  <ArrowLeft size={16} />
+                  Back to Home
+                </Link>
+                <h1>My Projects</h1>
+                <p>
+                  Welcome back, {user.fullName || user.email}! Here are your submitted projects.
+                </p>
+              </div>
+              <button 
+                className="btn btn-secondary"
+                onClick={async () => {
+                  await signOut();
+                }}
+                style={{ marginTop: '1rem' }}
+              >
+                Sign Out
+              </button>
+            </div>
           </div>
 
           {/* Projects List */}
