@@ -88,124 +88,126 @@ const SignUpForm = ({ onSuccess, onSwitchToSignIn }: SignUpFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <h2 className="font-display text-2xl font-bold mb-2">Create Account</h2>
-        <p className="text-sm text-primary-600">
-          Get started with your free account.
-        </p>
-      </div>
-
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600">{error}</p>
-        </div>
-      )}
-
-      {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm text-green-600">{success}</p>
-        </div>
-      )}
-
-      <div className="space-y-4">
+    <div className="landing-page">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <Label htmlFor="fullName">Full Name</Label>
-          <Input
-            id="fullName"
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="John Doe"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              disabled={loading}
-              minLength={6}
-              className="pr-10"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-700"
-              tabIndex={-1}
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
-          <p className="text-xs text-primary-500 mt-1">
-            Must be at least 6 characters
+          <h2 className="font-display text-2xl font-bold mb-2">Create Account</h2>
+          <p className="text-sm text-primary-600">
+            Get started with your free account.
           </p>
         </div>
 
-        <div>
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <div className="relative">
+        {error && (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
+
+        {success && (
+          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-sm text-green-600">{success}</p>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="fullName">Full Name</Label>
             <Input
-              id="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="••••••••"
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="John Doe"
               required
               disabled={loading}
-              minLength={6}
-              className="pr-10"
             />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-700"
-              tabIndex={-1}
-            >
-              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
+          </div>
+
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+                minLength={6}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-700"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            <p className="text-xs text-primary-500 mt-1">
+              Must be at least 6 characters
+            </p>
+          </div>
+
+          <div>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+                minLength={6}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-700"
+                tabIndex={-1}
+              >
+                {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <Button type="submit" className="w-full" variant="cta" disabled={loading}>
-        {loading ? 'Creating account...' : 'Create Account'}
-      </Button>
+        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+          {loading ? 'Creating account...' : 'Create Account'}
+        </button>
 
-      {onSwitchToSignIn && (
-        <p className="text-center text-sm text-primary-600">
-          Already have an account?{' '}
-          <button
-            type="button"
-            onClick={onSwitchToSignIn}
-            className="text-accent font-semibold hover:underline"
-          >
-            Sign In
-          </button>
-        </p>
-      )}
-    </form>
+        {onSwitchToSignIn && (
+          <p className="text-center text-sm text-primary-600">
+            Already have an account?{' '}
+            <button
+              type="button"
+              onClick={onSwitchToSignIn}
+              className="text-accent font-semibold hover:underline"
+            >
+              Sign In
+            </button>
+          </p>
+        )}
+      </form>
+    </div>
   );
 };
 

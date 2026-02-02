@@ -1,36 +1,39 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import Hero from '@/components/sections/Hero';
-import ProblemBar from '@/components/sections/ProblemBar';
-import SocialProof from '@/components/sections/SocialProof';
-import Services from '@/components/sections/Services';
-import HowItWorks from '@/components/sections/HowItWorks';
-import Testimonials from '@/components/sections/Testimonials';
-import WhySection from '@/components/sections/WhySection';
-import TrustIndicators from '@/components/sections/TrustIndicators';
-import Guarantee from '@/components/sections/Guarantee';
-import FinalCTA from '@/components/sections/FinalCTA';
+import Navbar from '@/components/landing/Navbar';
+import HeroSection from '@/components/landing/HeroSection';
+import LogosSection from '@/components/landing/LogosSection';
+import StatsSection from '@/components/landing/StatsSection';
+import HowItWorksSection from '@/components/landing/HowItWorksSection';
+import ExpertsSection from '@/components/landing/ExpertsSection';
+import UseCasesSection from '@/components/landing/UseCasesSection';
+import FeaturedTestimonial from '@/components/landing/FeaturedTestimonial';
+import FeaturesSection from '@/components/landing/FeaturesSection';
+import TestimonialsGrid from '@/components/landing/TestimonialsGrid';
+import CTASection from '@/components/landing/CTASection';
+import FooterSection from '@/components/landing/FooterSection';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const Index = () => {
+  useScrollReveal();
+
   return (
-    <div className="min-h-screen">
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:bg-accent focus:text-white focus:px-4 focus:py-2">
+    <div className="landing-page">
+      <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      <Header />
-      <Hero />
-      <ProblemBar />
-      <SocialProof />
-      <main id="main">
-        <Services />
-        <HowItWorks />
-        <Testimonials />
-        <WhySection />
-        <TrustIndicators />
-        <Guarantee />
-        <FinalCTA />
+      <Navbar />
+      <main id="main-content">
+        <HeroSection />
+        <LogosSection />
+        <StatsSection />
+        <HowItWorksSection />
+        <ExpertsSection />
+        <UseCasesSection />
+        <FeaturedTestimonial />
+        <FeaturesSection />
+        <TestimonialsGrid />
+        <CTASection />
       </main>
-      <Footer />
+      <FooterSection />
     </div>
   );
 };

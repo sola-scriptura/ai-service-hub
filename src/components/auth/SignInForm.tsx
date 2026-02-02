@@ -41,76 +41,78 @@ const SignInForm = ({ onSuccess, onSwitchToSignUp }: SignInFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <h2 className="font-display text-2xl font-bold mb-2">Sign In</h2>
-        <p className="text-sm text-primary-600">
-          Welcome back! Sign in to continue.
-        </p>
-      </div>
-
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600">{error}</p>
-        </div>
-      )}
-
-      <div className="space-y-4">
+    <div className="landing-page">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            required
-            disabled={loading}
-          />
+          <h2 className="font-display text-2xl font-bold mb-2">Sign In</h2>
+          <p className="text-sm text-primary-600">
+            Welcome back! Sign in to continue.
+          </p>
         </div>
 
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <div className="relative">
+        {error && (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="email">Email</Label>
             <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
               required
               disabled={loading}
-              className="pr-10"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-700"
-              tabIndex={-1}
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
+          </div>
+
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-700"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <Button type="submit" className="w-full" variant="cta" disabled={loading}>
-        {loading ? 'Signing in...' : 'Sign In'}
-      </Button>
+        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+          {loading ? 'Signing in...' : 'Sign In'}
+        </button>
 
-      {onSwitchToSignUp && (
-        <p className="text-center text-sm text-primary-600">
-          Don't have an account?{' '}
-          <button
-            type="button"
-            onClick={onSwitchToSignUp}
-            className="text-accent font-semibold hover:underline"
-          >
-            Sign Up
-          </button>
-        </p>
-      )}
-    </form>
+        {onSwitchToSignUp && (
+          <p className="text-center text-sm text-primary-600">
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={onSwitchToSignUp}
+              className="text-accent font-semibold hover:underline"
+            >
+              Sign Up
+            </button>
+          </p>
+        )}
+      </form>
+    </div>
   );
 };
 

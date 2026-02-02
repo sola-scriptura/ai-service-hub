@@ -4,10 +4,8 @@ import { useAuth } from '@/context/AuthContext';
 import { adminApi, AdminProject, AdminUser } from '@/services/adminApi';
 import { emailApi } from '@/services/emailApi';
 import { ProjectStatus, UserRole } from '@/types/database';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import Navbar from '@/components/landing/Navbar';
+import FooterSection from '@/components/landing/FooterSection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -312,21 +310,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'in_progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'revision':
-        return 'bg-orange-100 text-orange-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
+  const getStatusClass = (status: string) => {
+    return `status-badge status-${status}`;
   };
 
   const formatStatus = (status: string) => {
@@ -339,6 +324,10 @@ const AdminDashboard = () => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const getRoleClass = (role: string) => {
+    return `role-badge role-${role}`;
   };
 
   // Filter projects
@@ -354,18 +343,16 @@ const AdminDashboard = () => {
   // Access denied
   if (!user || isAdmin === false) {
     return (
-      <div className="min-h-screen">
-        <Header />
-        <main className="py-24 px-[5%] text-center">
-          <h1 className="font-display text-3xl font-bold mb-4">Access Denied</h1>
-          <p className="text-primary-600 mb-8">
-            You do not have permission to access the admin dashboard.
-          </p>
-          <Button asChild variant="cta">
+      <div className="landing-page">
+        <Navbar />
+        <main className="centered-page">
+          <div>
+            <h1>Access Denied</h1>
+            <p>You do not have permission to access the admin dashboard.</p>
             <Link to="/">Go Home</Link>
-          </Button>
+          </div>
         </main>
-        <Footer />
+        <FooterSection />
       </div>
     );
   }
@@ -373,35 +360,36 @@ const AdminDashboard = () => {
   // Loading
   if (isAdmin === null || loading) {
     return (
-      <div className="min-h-screen">
-        <Header />
-        <main className="py-24 px-[5%] text-center">
-          <p className="text-primary-600">Loading admin dashboard...</p>
+      <div className="landing-page">
+        <Navbar />
+        <main className="centered-page">
+          <div>
+            <p style={{ color: 'var(--text-secondary)' }}>Loading admin dashboard...</p>
+          </div>
         </main>
-        <Footer />
+        <FooterSection />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <Header />
-      <main className="py-8 px-[5%]">
-        <div className="max-w-[1400px] mx-auto">
+    <div className="landing-page">
+      <Navbar />
+      <main className="admin-page">
+        <div className="admin-inner">
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div className="admin-top">
             <div>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 mb-2 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
+              <Link to="/" className="back-link back-link-dark">
+                <ArrowLeft size={16} />
                 Back to Home
               </Link>
-              <h1 className="font-display text-3xl font-bold">Admin Dashboard</h1>
-              <p className="text-primary-600">Manage projects, users, and system settings</p>
+              <h1 style={{ fontSize: 'var(--text-3xl)', fontWeight: 800, letterSpacing: '-0.04em', fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif" }}>
+                Admin Dashboard
+              </h1>
+              <p style={{ color: 'var(--text-secondary)' }}>Manage projects, users, and system settings</p>
             </div>
-            <div className="flex gap-2">
+            <div className="admin-actions">
               <Button
                 variant="outline"
                 onClick={handleRefresh}
@@ -424,8 +412,8 @@ const AdminDashboard = () => {
                       Add a new admin user with full dashboard access.
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem 0' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <Label htmlFor="adminName">Full Name</Label>
                       <Input
                         id="adminName"
@@ -434,7 +422,7 @@ const AdminDashboard = () => {
                         placeholder="John Doe"
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <Label htmlFor="adminEmail">Email</Label>
                       <Input
                         id="adminEmail"
@@ -444,7 +432,7 @@ const AdminDashboard = () => {
                         placeholder="admin@example.com"
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <Label htmlFor="adminPassword">Password</Label>
                       <Input
                         id="adminPassword"
@@ -476,76 +464,62 @@ const AdminDashboard = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-            <Card>
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <FolderKanban className="w-5 h-5 text-primary-600" />
-                  <span className="text-sm text-primary-600">Total</span>
-                </div>
-                <p className="text-2xl font-bold mt-1">{stats.total}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-yellow-600" />
-                  <span className="text-sm text-primary-600">Pending</span>
-                </div>
-                <p className="text-2xl font-bold mt-1">{stats.pending}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <RefreshCw className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm text-primary-600">In Progress</span>
-                </div>
-                <p className="text-2xl font-bold mt-1">{stats.inProgress}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-primary-600">Completed</span>
-                </div>
-                <p className="text-2xl font-bold mt-1">{stats.completed}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-orange-600" />
-                  <span className="text-sm text-primary-600">Revision</span>
-                </div>
-                <p className="text-2xl font-bold mt-1">{stats.revision}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-red-600" />
-                  <span className="text-sm text-primary-600">Cancelled</span>
-                </div>
-                <p className="text-2xl font-bold mt-1">{stats.cancelled}</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-green-50">
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-green-700">Revenue</span>
-                </div>
-                <p className="text-2xl font-bold mt-1 text-green-700">
-                  ${stats.totalRevenue.toFixed(2)}
-                </p>
-              </CardContent>
-            </Card>
+          <div className="stats-cards">
+            <div className="stat-card">
+              <div className="stat-card-label">
+                <FolderKanban size={18} />
+                <span>Total</span>
+              </div>
+              <div className="stat-card-value">{stats.total}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-card-label" style={{ color: '#B45309' }}>
+                <Clock size={18} />
+                <span>Pending</span>
+              </div>
+              <div className="stat-card-value">{stats.pending}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-card-label" style={{ color: '#0369A1' }}>
+                <RefreshCw size={18} />
+                <span>In Progress</span>
+              </div>
+              <div className="stat-card-value">{stats.inProgress}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-card-label" style={{ color: 'var(--green)' }}>
+                <TrendingUp size={18} />
+                <span>Completed</span>
+              </div>
+              <div className="stat-card-value">{stats.completed}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-card-label" style={{ color: 'var(--warm)' }}>
+                <Mail size={18} />
+                <span>Revision</span>
+              </div>
+              <div className="stat-card-value">{stats.revision}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-card-label" style={{ color: '#DC2626' }}>
+                <Users size={18} />
+                <span>Cancelled</span>
+              </div>
+              <div className="stat-card-value">{stats.cancelled}</div>
+            </div>
+            <div className="stat-card highlight">
+              <div className="stat-card-label">
+                <DollarSign size={18} />
+                <span>Revenue</span>
+              </div>
+              <div className="stat-card-value">
+                ${stats.totalRevenue.toFixed(2)}
+              </div>
+            </div>
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="projects" className="space-y-6">
+          <Tabs defaultValue="projects" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <TabsList>
               <TabsTrigger value="projects">
                 <FolderKanban className="w-4 h-4 mr-2" />
@@ -558,15 +532,15 @@ const AdminDashboard = () => {
             </TabsList>
 
             {/* Projects Tab */}
-            <TabsContent value="projects" className="space-y-4">
+            <TabsContent value="projects" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {/* Filters */}
-              <div className="flex flex-wrap gap-4 p-4 bg-white rounded-lg border">
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="statusFilter" className="text-sm whitespace-nowrap">
+              <div className="filter-bar">
+                <div className="filter-group">
+                  <Label htmlFor="statusFilter" style={{ whiteSpace: 'nowrap' }}>
                     Status:
                   </Label>
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger id="statusFilter" className="w-[150px]">
+                    <SelectTrigger id="statusFilter" style={{ width: '150px' }}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -579,12 +553,12 @@ const AdminDashboard = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="serviceFilter" className="text-sm whitespace-nowrap">
+                <div className="filter-group">
+                  <Label htmlFor="serviceFilter" style={{ whiteSpace: 'nowrap' }}>
                     Service:
                   </Label>
                   <Select value={serviceFilter} onValueChange={setServiceFilter}>
-                    <SelectTrigger id="serviceFilter" className="w-[200px]">
+                    <SelectTrigger id="serviceFilter" style={{ width: '200px' }}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -598,61 +572,57 @@ const AdminDashboard = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="ml-auto text-sm text-primary-600">
+                <div className="filter-count">
                   Showing {filteredProjects.length} of {projects.length} projects
                 </div>
               </div>
 
               {/* Projects List */}
               {filteredProjects.length === 0 ? (
-                <Card>
-                  <CardContent className="py-12 text-center">
-                    <h3 className="font-display text-xl font-bold mb-2">No Projects Found</h3>
-                    <p className="text-primary-600">
-                      {projects.length === 0
-                        ? 'No projects have been submitted yet.'
-                        : 'No projects match your current filters.'}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="dash-empty">
+                  <h3>No Projects Found</h3>
+                  <p>
+                    {projects.length === 0
+                      ? 'No projects have been submitted yet.'
+                      : 'No projects match your current filters.'}
+                  </p>
+                </div>
               ) : (
-                <div className="space-y-4">
+                <div className="project-list">
                   {filteredProjects.map((project) => (
-                    <Card key={project.id} className="overflow-hidden">
-                      <CardHeader className="pb-2">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <CardTitle className="font-display text-lg">
-                                {project.title}
-                              </CardTitle>
-                              <Badge className={getStatusColor(project.status)}>
+                    <div key={project.id} className="dash-card">
+                      <div className="dash-card-header">
+                        <div className="admin-project-header">
+                          <div style={{ flex: 1 }}>
+                            <div className="admin-project-title">
+                              <h3>{project.title}</h3>
+                              <span className={getStatusClass(project.status)}>
                                 {formatStatus(project.status)}
-                              </Badge>
+                              </span>
                             </div>
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-primary-600">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
+                            <div className="dash-meta">
+                              <span className="dash-meta-item">
+                                <Clock size={16} />
                                 {new Date(project.submittedAt).toLocaleDateString()}
                               </span>
-                              <span className="flex items-center gap-1">
-                                <DollarSign className="w-4 h-4" />$
-                                {project.finalPrice.toFixed(2)}
+                              <span className="dash-meta-item">
+                                <DollarSign size={16} />
+                                ${project.finalPrice.toFixed(2)}
                               </span>
-                              <span className="flex items-center gap-1">
-                                <User className="w-4 h-4" />
+                              <span className="dash-meta-item">
+                                <User size={16} />
                                 {project.clientName || project.clientEmail}
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="admin-project-controls">
                             <Select
                               value={project.status}
                               onValueChange={(value) =>
                                 handleStatusChange(project.id, value as ProjectStatus)
                               }
                             >
-                              <SelectTrigger className="w-[140px]">
+                              <SelectTrigger style={{ width: '140px' }}>
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -676,67 +646,40 @@ const AdminDashboard = () => {
                             </Button>
                           </div>
                         </div>
-                      </CardHeader>
+                      </div>
 
                       {expandedProjects.has(project.id) && (
-                        <CardContent className="pt-4 border-t">
+                        <div className="admin-expand-content">
                           {project.description && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-sm mb-1">Description:</h4>
-                              <p className="text-primary-700">{project.description}</p>
+                            <div style={{ marginBottom: '1rem' }}>
+                              <h4 style={{ fontWeight: 600, fontSize: 'var(--text-sm)', marginBottom: '0.25rem' }}>Description:</h4>
+                              <p style={{ color: 'var(--text-secondary)' }}>{project.description}</p>
                             </div>
                           )}
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                            <div>
-                              <h4 className="font-semibold text-sm mb-2">Project Details</h4>
-                              <div className="space-y-1 text-sm">
-                                <p>
-                                  <span className="text-primary-600">Service:</span>{' '}
-                                  {project.serviceTitle}
-                                </p>
-                                <p>
-                                  <span className="text-primary-600">Expert:</span>{' '}
-                                  {project.expertName || 'N/A'}
-                                </p>
-                                <p>
-                                  <span className="text-primary-600">Quantity:</span>{' '}
-                                  {project.quantity}
-                                </p>
+                          <div className="admin-detail-grid">
+                            <div className="admin-detail-section">
+                              <h4>Project Details</h4>
+                              <div className="admin-detail-row">
+                                <p><span className="admin-detail-label">Service:</span> {project.serviceTitle}</p>
+                                <p><span className="admin-detail-label">Expert:</span> {project.expertName || 'N/A'}</p>
+                                <p><span className="admin-detail-label">Quantity:</span> {project.quantity}</p>
                               </div>
                             </div>
-                            <div>
-                              <h4 className="font-semibold text-sm mb-2">Quote Breakdown</h4>
-                              <div className="space-y-1 text-sm">
-                                <p>
-                                  <span className="text-primary-600">Base Price:</span> $
-                                  {project.basePrice.toFixed(2)}
-                                </p>
-                                <p>
-                                  <span className="text-primary-600">Urgency:</span>{' '}
-                                  {project.urgency}
-                                </p>
-                                <p>
-                                  <span className="text-primary-600">Complexity:</span>{' '}
-                                  {project.complexity}
-                                </p>
-                                <p className="font-semibold">
-                                  <span className="text-primary-600">Final:</span> $
-                                  {project.finalPrice.toFixed(2)}
-                                </p>
+                            <div className="admin-detail-section">
+                              <h4>Quote Breakdown</h4>
+                              <div className="admin-detail-row">
+                                <p><span className="admin-detail-label">Base Price:</span> ${project.basePrice.toFixed(2)}</p>
+                                <p><span className="admin-detail-label">Urgency:</span> {project.urgency}</p>
+                                <p><span className="admin-detail-label">Complexity:</span> {project.complexity}</p>
+                                <p style={{ fontWeight: 600 }}><span className="admin-detail-label">Final:</span> ${project.finalPrice.toFixed(2)}</p>
                               </div>
                             </div>
-                            <div>
-                              <h4 className="font-semibold text-sm mb-2">Client Info</h4>
-                              <div className="space-y-1 text-sm">
-                                <p>
-                                  <span className="text-primary-600">Name:</span>{' '}
-                                  {project.clientName || 'N/A'}
-                                </p>
-                                <p>
-                                  <span className="text-primary-600">Email:</span>{' '}
-                                  {project.clientEmail}
-                                </p>
+                            <div className="admin-detail-section">
+                              <h4>Client Info</h4>
+                              <div className="admin-detail-row">
+                                <p><span className="admin-detail-label">Name:</span> {project.clientName || 'N/A'}</p>
+                                <p><span className="admin-detail-label">Email:</span> {project.clientEmail}</p>
                               </div>
                             </div>
                           </div>
@@ -744,38 +687,27 @@ const AdminDashboard = () => {
                           {/* Files */}
                           {project.files.length > 0 && (
                             <div>
-                              <h4 className="font-semibold text-sm mb-2">
+                              <h4 style={{ fontWeight: 700, fontSize: 'var(--text-sm)', marginBottom: '0.5rem' }}>
                                 Uploaded Files ({project.files.length})
                               </h4>
-                              <div className="space-y-2">
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 {project.files.map((file) => (
-                                  <div
-                                    key={file.id}
-                                    className="flex items-center justify-between p-2 bg-neutral-50 rounded"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <File className="w-4 h-4 text-neutral-500" />
+                                  <div key={file.id} className="file-item">
+                                    <div className="file-info">
+                                      <File size={16} />
                                       <div>
-                                        <p className="text-sm font-medium">{file.fileName}</p>
-                                        <p className="text-xs text-neutral-500">
-                                          {formatFileSize(file.fileSize)}
-                                        </p>
+                                        <div className="file-name">{file.fileName}</div>
+                                        <div className="file-size">{formatFileSize(file.fileSize)}</div>
                                       </div>
                                     </div>
-                                    <Button
-                                      asChild
-                                      variant="ghost"
-                                      size="sm"
-                                      className="text-accent hover:text-accent-dark"
+                                    <a
+                                      href={file.fileUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="file-download"
                                     >
-                                      <a
-                                        href={file.fileUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        <Download className="w-4 h-4" />
-                                      </a>
-                                    </Button>
+                                      <Download size={16} />
+                                    </a>
                                   </div>
                                 ))}
                               </div>
@@ -783,69 +715,57 @@ const AdminDashboard = () => {
                           )}
 
                           {/* Timestamps */}
-                          <div className="mt-4 pt-4 border-t text-xs text-primary-500">
+                          <div className="admin-timestamps">
                             <span>Created: {new Date(project.createdAt).toLocaleString()}</span>
                             {project.startedAt && (
-                              <span className="ml-4">
-                                Started: {new Date(project.startedAt).toLocaleString()}
-                              </span>
+                              <span>Started: {new Date(project.startedAt).toLocaleString()}</span>
                             )}
                             {project.completedAt && (
-                              <span className="ml-4">
-                                Completed: {new Date(project.completedAt).toLocaleString()}
-                              </span>
+                              <span>Completed: {new Date(project.completedAt).toLocaleString()}</span>
                             )}
                           </div>
-                        </CardContent>
+                        </div>
                       )}
-                    </Card>
+                    </div>
                   ))}
                 </div>
               )}
             </TabsContent>
 
             {/* Users Tab */}
-            <TabsContent value="users" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>All Users</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
+            <TabsContent value="users" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="dash-card">
+                <div className="dash-card-header">
+                  <div className="dash-card-title">All Users</div>
+                </div>
+                <div className="dash-card-body">
+                  <div style={{ overflowX: 'auto' }}>
+                    <table className="users-table">
                       <thead>
-                        <tr className="border-b">
-                          <th className="text-left py-3 px-4 font-semibold">Name</th>
-                          <th className="text-left py-3 px-4 font-semibold">Email</th>
-                          <th className="text-left py-3 px-4 font-semibold">Role</th>
-                          <th className="text-left py-3 px-4 font-semibold">Joined</th>
-                          <th className="text-left py-3 px-4 font-semibold">Actions</th>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Role</th>
+                          <th>Joined</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {users.map((u) => (
-                          <tr key={u.id} className="border-b hover:bg-neutral-50">
-                            <td className="py-3 px-4">{u.fullName || 'N/A'}</td>
-                            <td className="py-3 px-4">{u.email}</td>
-                            <td className="py-3 px-4">
-                              <Badge
-                                className={
-                                  u.role === 'admin'
-                                    ? 'bg-purple-100 text-purple-800'
-                                    : u.role === 'expert'
-                                    ? 'bg-blue-100 text-blue-800'
-                                    : 'bg-gray-100 text-gray-800'
-                                }
-                              >
+                          <tr key={u.id}>
+                            <td>{u.fullName || 'N/A'}</td>
+                            <td>{u.email}</td>
+                            <td>
+                              <span className={getRoleClass(u.role)}>
                                 {u.role}
-                              </Badge>
+                              </span>
                             </td>
-                            <td className="py-3 px-4">
+                            <td>
                               {new Date(u.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="py-3 px-4">
+                            <td>
                               {u.id === user?.id ? (
-                                <span className="text-sm text-primary-500 italic">You</span>
+                                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', fontStyle: 'italic' }}>You</span>
                               ) : (
                                 <Select
                                   value={u.role}
@@ -853,7 +773,7 @@ const AdminDashboard = () => {
                                     handleRoleChange(u.id, value as UserRole)
                                   }
                                 >
-                                  <SelectTrigger className="w-[120px]">
+                                  <SelectTrigger style={{ width: '120px' }}>
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
@@ -869,13 +789,13 @@ const AdminDashboard = () => {
                       </tbody>
                     </table>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
       </main>
-      <Footer />
+      <FooterSection />
     </div>
   );
 };

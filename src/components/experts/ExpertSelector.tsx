@@ -32,15 +32,13 @@ const ExpertSelector = ({ serviceId }: ExpertSelectorProps) => {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-2xl font-bold mb-2">Select Your Expert</h2>
-          <p className="text-primary-600">
-            Choose from our vetted professionals. Expert selection does not affect pricing.
-          </p>
-        </div>
-        <div className="text-center py-12">
-          <p className="text-primary-600">Loading experts...</p>
+      <div className="detail-block">
+        <h2>Select Your Expert</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>
+          Choose from our vetted professionals. Expert selection does not affect pricing.
+        </p>
+        <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+          <p style={{ color: 'var(--text-secondary)' }}>Loading experts...</p>
         </div>
       </div>
     );
@@ -48,22 +46,20 @@ const ExpertSelector = ({ serviceId }: ExpertSelectorProps) => {
 
   if (experts.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-primary-600">No experts available for this service yet.</p>
+      <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+        <p style={{ color: 'var(--text-secondary)' }}>No experts available for this service yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-display text-2xl font-bold mb-2">Select Your Expert</h2>
-        <p className="text-primary-600">
-          Choose from our vetted professionals. Expert selection does not affect pricing.
-        </p>
-      </div>
+    <div className="detail-block">
+      <h2>Select Your Expert</h2>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+        Choose from our vetted professionals. Expert selection does not affect pricing.
+      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="experts-select-grid">
         {experts.map((expert) => (
           <ExpertCard
             key={expert.id}

@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { projectsApi, Project } from '@/services/projectsApi';
 import { fileUploadApi, ProjectFile } from '@/services/fileUploadApi';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import Navbar from '@/components/landing/Navbar';
+import FooterSection from '@/components/landing/FooterSection';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Clock, DollarSign, File, Download } from 'lucide-react';
 
@@ -21,11 +18,11 @@ const ClientDashboard = () => {
 
   const fetchProjects = async () => {
     if (!user) return;
-    
+
     try {
       console.log('[ClientDashboard] Fetching projects for user:', user.id);
       const userProjects = await projectsApi.getByClient(user.id);
-      
+
       // Fetch files for each project
       const projectsWithFiles = await Promise.all(
         userProjects.map(async (project) => {
@@ -33,7 +30,7 @@ const ClientDashboard = () => {
           return { ...project, files };
         })
       );
-      
+
       console.log('[ClientDashboard] Fetched projects with files:', projectsWithFiles);
       setProjects(projectsWithFiles);
     } catch (error) {
@@ -47,15 +44,8 @@ const ClientDashboard = () => {
     fetchProjects();
   }, [user]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'in_progress': return 'bg-blue-100 text-blue-800';
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'revision': return 'bg-orange-100 text-orange-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+  const getStatusClass = (status: string) => {
+    return `status-badge status-${status}`;
   };
 
   const formatStatus = (status: string) => {
@@ -72,142 +62,131 @@ const ClientDashboard = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen">
-        <Header />
-        <main className="py-24 px-[5%] text-center">
-          <h1 className="font-display text-3xl font-bold mb-4">Access Denied</h1>
-          <p className="text-primary-600 mb-8">Please sign in to view your dashboard.</p>
-          <Button asChild variant="cta">
+      <div className="landing-page">
+        <Navbar />
+        <main className="centered-page">
+          <div>
+            <h1>Access Denied</h1>
+            <p>Please sign in to view your dashboard.</p>
             <Link to="/">Go Home</Link>
-          </Button>
+          </div>
         </main>
-        <Footer />
+        <FooterSection />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      <Header />
-      <main className="py-12 px-[5%]">
-        <div className="max-w-[1200px] mx-auto">
+    <div className="landing-page">
+      <Navbar />
+      <main className="dashboard-page">
+        <div className="dashboard-inner">
           {/* Header */}
-          <div className="mb-8">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 mb-4 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
+          <div className="dashboard-header">
+            <Link to="/" className="back-link back-link-dark">
+              <ArrowLeft size={16} />
               Back to Home
             </Link>
-            <h1 className="font-display text-3xl font-bold mb-2">My Projects</h1>
-            <p className="text-primary-600">
+            <h1>My Projects</h1>
+            <p>
               Welcome back, {user.fullName || user.email}! Here are your submitted projects.
             </p>
           </div>
 
           {/* Projects List */}
           {loading ? (
-            <div className="text-center py-12">
-              <p className="text-primary-600">Loading your projects...</p>
+            <div className="dash-empty">
+              <p>Loading your projects...</p>
             </div>
           ) : projects.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <h3 className="font-display text-xl font-bold mb-2">No Projects Yet</h3>
-                <p className="text-primary-600 mb-6">
-                  You haven't submitted any projects yet. Get started by choosing a service!
-                </p>
-                <Button asChild variant="cta">
-                  <Link to="/#services">Browse Services</Link>
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="dash-empty">
+              <h3>No Projects Yet</h3>
+              <p>
+                You haven't submitted any projects yet. Get started by choosing a service!
+              </p>
+              <Link to="/#services" className="btn btn-primary">Browse Services</Link>
+            </div>
           ) : (
-            <div className="space-y-6">
+            <div className="project-list">
               {projects.map((project) => (
-                <Card key={project.id}>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
+                <div key={project.id} className="dash-card">
+                  <div className="dash-card-header">
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                       <div>
-                        <CardTitle className="font-display text-xl mb-2">
-                          {project.title}
-                        </CardTitle>
-                        <div className="flex items-center gap-4 text-sm text-primary-600">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
+                        <div className="dash-card-title">{project.title}</div>
+                        <div className="dash-meta">
+                          <span className="dash-meta-item">
+                            <Clock size={16} />
                             Submitted {new Date(project.submittedAt).toLocaleDateString()}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <DollarSign className="w-4 h-4" />
+                          <span className="dash-meta-item">
+                            <DollarSign size={16} />
                             ${project.finalPrice}
                           </span>
                         </div>
                       </div>
-                      <Badge className={getStatusColor(project.status)}>
+                      <span className={getStatusClass(project.status)}>
                         {formatStatus(project.status)}
-                      </Badge>
+                      </span>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+                  </div>
+                  <div className="dash-card-body">
                     {project.description && (
-                      <p className="text-primary-700 mb-4">{project.description}</p>
+                      <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>{project.description}</p>
                     )}
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4">
+
+                    <div className="dash-detail-grid">
                       <div>
-                        <span className="font-semibold">Service:</span>
-                        <p className="text-primary-600 capitalize">
+                        <div className="dash-detail-label">Service</div>
+                        <div className="dash-detail-value">
                           {project.serviceId.replace('-', ' ')}
-                        </p>
+                        </div>
                       </div>
                       <div>
-                        <span className="font-semibold">Quantity:</span>
-                        <p className="text-primary-600">{project.quantity}</p>
+                        <div className="dash-detail-label">Quantity</div>
+                        <div className="dash-detail-value">{project.quantity}</div>
                       </div>
                       <div>
-                        <span className="font-semibold">Urgency:</span>
-                        <p className="text-primary-600 capitalize">{project.urgency}</p>
+                        <div className="dash-detail-label">Urgency</div>
+                        <div className="dash-detail-value">{project.urgency}</div>
                       </div>
                     </div>
 
                     {/* Uploaded Files */}
                     {project.files.length > 0 && (
-                      <div className="mt-4">
-                        <h4 className="font-semibold text-sm mb-2">Uploaded Files:</h4>
-                        <div className="space-y-2">
+                      <div style={{ marginTop: '1rem' }}>
+                        <div className="dash-detail-label" style={{ marginBottom: '0.5rem' }}>Uploaded Files:</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                           {project.files.map((file) => (
-                            <div key={file.id} className="flex items-center justify-between p-2 bg-neutral-50 rounded">
-                              <div className="flex items-center gap-2">
-                                <File className="w-4 h-4 text-neutral-500" />
+                            <div key={file.id} className="file-item">
+                              <div className="file-info">
+                                <File size={16} />
                                 <div>
-                                  <p className="text-sm font-medium">{file.fileName}</p>
-                                  <p className="text-xs text-neutral-500">{formatFileSize(file.fileSize)}</p>
+                                  <div className="file-name">{file.fileName}</div>
+                                  <div className="file-size">{formatFileSize(file.fileSize)}</div>
                                 </div>
                               </div>
-                              <Button
-                                asChild
-                                variant="ghost"
-                                size="sm"
-                                className="text-accent hover:text-accent-dark"
+                              <a
+                                href={file.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="file-download"
                               >
-                                <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
-                                  <Download className="w-4 h-4" />
-                                </a>
-                              </Button>
+                                <Download size={16} />
+                              </a>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}
         </div>
       </main>
-      <Footer />
+      <FooterSection />
     </div>
   );
 };
