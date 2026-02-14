@@ -13,9 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import "@/styles/landing.css";
-
 const queryClient = new QueryClient();
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -23,7 +21,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-         <BrowserRouter basename="/ai-service-hub" future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+          <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/start-project" element={<ProtectedRoute><StartProject /></ProtectedRoute>} />
@@ -39,5 +37,4 @@ const App = () => (
     </AuthProvider>
   </QueryClientProvider>
 );
-
 export default App;
